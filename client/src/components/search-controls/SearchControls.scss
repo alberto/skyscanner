@@ -1,0 +1,22 @@
+@import "~bpk-mixins";
+
+.SearchControls {
+  display: flex;
+
+  padding: $bpk-spacing-sm $bpk-spacing-sm;
+}
+
+.SearchControls__action {
+  &:not(:last-of-type) {
+    margin-right: 32px;
+  }
+  
+  &:last-of-type {
+    margin-left: auto;
+  }
+}
+
+.SearchControls__icon-alert {
+  vertical-align: text-bottom;
+  fill: currentColor;
+}

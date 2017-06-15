@@ -3,6 +3,7 @@ import './App.scss';
 
 import TopNav from './components/topnav';
 import SearchSummary from './components/search-summary';
+import SearchControls from './components/search-controls';
 
 class App extends Component {
   render() {
@@ -10,8 +11,7 @@ class App extends Component {
       <div className="App">
         <TopNav/>
         <SearchSummary />
-        // TODO header
-        // TODO placeholder controls
+        <SearchControls />
         // TODO results component
       </div>
     );
