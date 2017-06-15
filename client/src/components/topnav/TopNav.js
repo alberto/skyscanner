@@ -1,6 +1,8 @@
 import React from 'react';
+import BpkMenuIcon from 'bpk-component-icon/lg/menu';
+
 import './TopNav.scss';
-import logo from '../..//logo.svg';
+import logo from '../../logo-full.svg';
 
 const TopNav = () => (
   <header className='header'>
@@ -8,7 +10,9 @@ const TopNav = () => (
       <span className='logoText'>Skyscanner</span>
       <img className='logo' alt="Skyscanner" src={logo}/>
     </a>
-     // TODO burger menu icon
+    <a>
+      <BpkMenuIcon className="TopNav__menu-icon" />
+    </a>
   </header>
 );
 
