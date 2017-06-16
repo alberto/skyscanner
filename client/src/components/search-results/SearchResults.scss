@@ -82,3 +82,9 @@
 .SearchResults__stops--0 {
   color: $bpk-color-green-400;
 }
+
+.SearchResults__spinner {
+  text-align: center;
+  font-size: $bpk-font-size-xl;
+  padding: $bpk-spacing-xl;
+}

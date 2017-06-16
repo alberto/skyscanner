@@ -2,6 +2,8 @@ import React from 'react';
 import BpkArrowIcon from 'bpk-component-icon/lg/long-arrow-right';
 import BpkButton from 'bpk-component-button';
 import BpkCard from 'bpk-component-card';
+import { BpkExtraLargeSpinner } from 'bpk-component-spinner';
+
 
 
 import './SearchResults.scss';
@@ -70,9 +72,19 @@ const card = (it, id) => (
 
 const SearchResults = ({itineraries}) => (
   <div className="SearchResults">
-    {itineraries.map((it, index) => {
-      return card(it, index);
-    })}
+    {
+      itineraries.length 
+      ? (
+        itineraries.map((it, index) => {
+          return card(it, index);
+        })
+      ) : (
+        <div className="SearchResults__spinner">
+          <BpkExtraLargeSpinner />
+          <div>Searching</div>
+        </div>
+      )
+    }
   </div>
 );
 
