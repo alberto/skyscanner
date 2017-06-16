@@ -4,6 +4,7 @@ require('es6-promise').polyfill();
 const express = require('express');
 const app = express();
 const api = require('./api/');
+const mapper = require('./mapper');
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -18,21 +19,13 @@ app.get('/', (req, res) => {
 /**
   Simple flight search api wrapper.
 
-  TODO: client should provide params
-
   Api params and location values are here:
   http://business.skyscanner.net/portal/en-GB/Documentation/FlightsLivePricingQuickStart
 */
 app.get('/api/search', (req, res) => {
-
-  api.livePricing.search({
-    // TODO client to provide params
-    // check in api docs what client should provide
-  })
+  api.livePricing.search(req.query)
   .then((results) => {
-    // TODO - a better format for displaying results to the client
-    console.log('TODO: transform results for consumption by client');
-    res.json(results);
+    res.json(mapper.mapAll(results));
   })
   .catch(console.error);
 });

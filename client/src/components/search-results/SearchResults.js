@@ -6,60 +6,73 @@ import BpkCard from 'bpk-component-card';
 
 import './SearchResults.scss';
 
-const logo = 'https://logos.skyscnr.com/images/airlines/favicon/EZ.png';
+const logo = (carrier) => `https://logos.skyscnr.com/images/airlines/favicon/${carrier}.png`;
 
-const card = (
-  <BpkCard className="SearchResults__item">
-    <div className="SearchResults__leg">
-      <img className="SearchResults__airline-logo" alt="Skyscanner" src={logo}/>
-      <div className="SearchResults__leg-details">
-        <div className="SearchResults__Station">
-          <div className="SearchResults__time">07:00</div>
-          <div className="SearchResults__station">EDI</div>
-        </div>
-        <BpkArrowIcon className="SearchResults__arrow" />
-        <div className="SearchResults__Station">
-          <div className="SearchResults__time">08:30</div>
-          <div className="SearchResults__station">LHR</div>
-        </div>
+const time = (datetime) => {
+  return datetime.split('T')[1].slice(0, -3);
+}
+
+const duration = (minutes) => {
+  const hours = Math.floor(minutes / 60);
+  const mins = (minutes % 60);
+  const someMin = mins ? ` ${mins}` : '';
+  return `${hours}h${someMin}`;
+}
+
+const stops = (count) => {
+  const className = count ? 'SearchResults__stops' : 'SearchResults__stops SearchResults__stops--0'; 
+  return (
+    <div className={className}>
+      {count ? `${count} stops` : 'Direct'}
+    </div>
+  );
+}
+
+const leg = (leg) => (
+  <div className="SearchResults__leg">
+    <img className="SearchResults__airline-logo" alt="Skyscanner" src={logo(leg.carrier.code)}/>
+    <div className="SearchResults__leg-details">
+      <div className="SearchResults__Station">
+        <div className="SearchResults__time">{time(leg.departure)}</div>
+        <div className="SearchResults__station">{leg.origin.code}</div>
       </div>
-      <div className="SearchResults__duration">
-        <div className="SearchResults__time-lapse">1h 30</div>
-        <div className="SearchResults__stops SearchResults__stops--0">Direct</div>
+      <BpkArrowIcon className="SearchResults__arrow" />
+      <div className="SearchResults__Station">
+        <div className="SearchResults__time">{time(leg.arrival)}</div>
+        <div className="SearchResults__station">{leg.destination.code}</div>
       </div>
     </div>
-    <div className="SearchResults__leg">
-      <img className="SearchResults__airline-logo" alt="Skyscanner" src={logo}/>
-      <div className="SearchResults__leg-details">
-        <div className="SearchResults__Station">
-          <div className="SearchResults__time">14:30</div>
-          <div className="SearchResults__station">LHR</div>
-        </div>
-        <BpkArrowIcon className="SearchResults__arrow" />
-        <div className="SearchResults__Station">
-          <div className="SearchResults__time">16:00</div>
-          <div className="SearchResults__station">EDI</div>
-        </div>
-      </div>
-      <div className="SearchResults__duration">
-        <div className="SearchResults__time-lapse">1h 30</div>
-        <div className="SearchResults__stops SearchResults__stops--0">Direct</div>
-      </div>
+    <div className="SearchResults__duration">
+      <div className="SearchResults__time-lapse">{duration(leg.duration)}</div>
+      {stops(leg.stops)}
     </div>
+  </div>
+);
+
+const price = (amount) => (
+  <div className="SearchResults__price">£{Math.round(amount)}</div>
+);
+
+const card = (it, id) => (
+  <BpkCard className="SearchResults__item" key={id}>
+    {leg(it.outbound)}
+    {leg(it.inbound)}
+
     <div className="SearchResults__main-quote">
       <div>
-        <div className="SearchResults__price">£98</div>
-        <div className="SearchResults__agent">omegaflightstore.com</div>
+        {price(it.pricing.price)}
+        <div className="SearchResults__agent">{it.pricing.agent.name}</div>
       </div>
-      <BpkButton className="SearchResults__select">Select</BpkButton>
+      <BpkButton className="SearchResults__select" href={it.pricing.url}>Select</BpkButton>
     </div>
   </BpkCard>
 );
 
-const SearchResults = () => (
+const SearchResults = ({itineraries}) => (
   <div className="SearchResults">
-    {card}
-    {card}
+    {itineraries.map((it, index) => {
+      return card(it, index);
+    })}
   </div>
 );
 
