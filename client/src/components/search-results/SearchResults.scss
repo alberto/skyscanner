@@ -1,0 +1,80 @@
+@import "~bpk-mixins";
+
+.SearchResults {
+  background-color: $bpk-color-gray-50;
+  padding: $bpk-spacing-sm;
+  line-height: 1;
+}
+
+.SearchResults__item {
+  margin-bottom: $bpk-spacing-md;
+}
+
+.SearchResults__leg {
+  display: flex;
+  margin-bottom: $bpk-spacing-md;
+}
+
+.SearchResults__time {
+  height: $bpk-icon-size-lg;
+}
+
+.SearchResults__station {
+  color: $bpk-color-gray-500;
+}
+
+.SearchResults__leg-details {
+  display: flex;
+}
+
+.SearchResults__airline-logo {
+  @include bpk-border-radius-xs();
+
+  width: $bpk-icon-size-lg;
+  height: $bpk-icon-size-lg;
+  margin-right: $bpk-spacing-sm;
+}
+
+.SearchResults__arrow {
+  fill: $bpk-color-gray-300;
+  margin: 0 $bpk-spacing-sm;
+  align-self: center;
+}
+
+.SearchResults__main-quote {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.SearchResults__price {
+  font-size: $bpk-font-size-xl;
+  margin-bottom: $bpk-spacing-xs;
+}
+
+.SearchResults__agent {
+  color: $bpk-color-gray-200;
+}
+
+.SearchResults__select {
+  padding-left: 1.875rem;
+  padding-right: 1.875rem;
+}
+
+.SearchResults__duration {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: $bpk-font-size-sm;
+  margin-left: auto;
+}
+
+.SearchResults__time-lapse {
+  color: $bpk-color-gray-500;
+}
+
+.SearchResults__stops--0 {
+  color: $bpk-color-green-400;
+}

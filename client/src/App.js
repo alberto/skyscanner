@@ -4,6 +4,7 @@ import './App.scss';
 import TopNav from './components/topnav';
 import SearchSummary from './components/search-summary';
 import SearchControls from './components/search-controls';
+import SearchResults from './components/search-results';
 
 class App extends Component {
   render() {
@@ -12,7 +13,7 @@ class App extends Component {
         <TopNav/>
         <SearchSummary />
         <SearchControls />
-        // TODO results component
+        <SearchResults />
       </div>
     );
   }
