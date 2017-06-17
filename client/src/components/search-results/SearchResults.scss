@@ -4,11 +4,7 @@
   background-color: $bpk-color-gray-50;
   padding: $bpk-spacing-sm;
   line-height: 1;
-  flex-grow: 1;
-}
-
-.SearchResults__item {
-  padding-bottom: $bpk-spacing-md;
+  flex: 1 1 auto;
 }
 
 .SearchResults__leg {

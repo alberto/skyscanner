@@ -84,11 +84,17 @@ const SearchResults = ({itineraries}) => (
     {
       itineraries.length 
       ? (
-            <AutoSizer>
-              {({ width, height }) => (
+        <WindowScroller>
+          {({ height, isScrolling, onChildScroll, scrollTop }) => (
+            <AutoSizer disableHeight>
+              {({ width }) => (
                 <List
+                  autoHeight
                   width={width}
                   height={height}
+                  isScrolling={isScrolling}
+                  onScroll={onChildScroll}
+                  scrollTop={scrollTop}
                   rowCount={itineraries.length}
                   rowHeight={196 + 12}
                   rowRenderer={rowRenderer(itineraries)}
@@ -96,6 +102,8 @@ const SearchResults = ({itineraries}) => (
                 />
               )}
             </AutoSizer>
+          )}
+        </WindowScroller>
       ) : (
         <div className="SearchResults__spinner">
           <BpkExtraLargeSpinner />
