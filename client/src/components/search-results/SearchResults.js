@@ -3,8 +3,7 @@ import BpkArrowIcon from 'bpk-component-icon/lg/long-arrow-right';
 import BpkButton from 'bpk-component-button';
 import BpkCard from 'bpk-component-card';
 import { BpkExtraLargeSpinner } from 'bpk-component-spinner';
-
-
+import {AutoSizer, List, WindowScroller} from 'react-virtualized';
 
 import './SearchResults.scss';
 
@@ -55,29 +54,48 @@ const price = (amount) => (
   <div className="SearchResults__price">£{Math.round(amount)}</div>
 );
 
-const card = (it, id) => (
-  <BpkCard className="SearchResults__item" key={id}>
-    {leg(it.outbound)}
-    {leg(it.inbound)}
+const card = (it, id, style) => (
+  <div className="SearchResults__item" key={id} style={style}>
+    <BpkCard>
+      {leg(it.outbound)}
+      {leg(it.inbound)}
 
-    <div className="SearchResults__main-quote">
-      <div>
-        {price(it.pricing.price)}
-        <div className="SearchResults__agent">{it.pricing.agent.name}</div>
+      <div className="SearchResults__main-quote">
+        <div>
+          {price(it.pricing.price)}
+          <div className="SearchResults__agent">{it.pricing.agent.name}</div>
+        </div>
+        <BpkButton className="SearchResults__select" href={it.pricing.url}>Select</BpkButton>
       </div>
-      <BpkButton className="SearchResults__select" href={it.pricing.url}>Select</BpkButton>
-    </div>
-  </BpkCard>
+    </BpkCard>
+  </div>
 );
 
+function rowRenderer(items) {
+  console.log("called");
+  return (({index, style}) => {
+    style.height -= 6; 
+    return card(items[index], index, style);
+  });
+}
+
 const SearchResults = ({itineraries}) => (
-  <div className="SearchResults">
+  <div className="SearchResults" >
     {
       itineraries.length 
       ? (
-        itineraries.map((it, index) => {
-          return card(it, index);
-        })
+            <AutoSizer>
+              {({ width, height }) => (
+                <List
+                  width={width}
+                  height={height}
+                  rowCount={itineraries.length}
+                  rowHeight={196 + 12}
+                  rowRenderer={rowRenderer(itineraries)}
+                  overscanRowCount={2}
+                />
+              )}
+            </AutoSizer>
       ) : (
         <div className="SearchResults__spinner">
           <BpkExtraLargeSpinner />

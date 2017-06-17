@@ -60,7 +60,8 @@
     "lodash": "^4.15.0",
     "qs": "^6.4.0",
     "react": "^15.2.1",
-    "react-dom": "^15.2.1"
+    "react-dom": "^15.2.1",
+    "react-virtualized": "^9.8.0"
   },
   "scripts": {
     "client": "cd client && node ./scripts/start.js",
