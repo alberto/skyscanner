@@ -50,9 +50,7 @@ class App extends Component {
       return response.json();
     })
     .then((results) => {
-      this.setState({itineraries: results.slice(0, 100)}, () => {
-        setTimeout(() => this.setState({itineraries: results}), 0);
-      });
+      this.setState({itineraries: results});
     })
     .catch(console.error);
   }
