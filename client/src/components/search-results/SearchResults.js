@@ -18,7 +18,7 @@ class SearchResults extends Component {
     return (
       <div className="SearchResults" >
         {
-          itineraries.length 
+          itineraries.length
           ? (
             <WindowScroller>
               {({ height, isScrolling, onChildScroll, scrollTop }) => (
@@ -50,10 +50,10 @@ class SearchResults extends Component {
       </div>
     );
   }
-  
-  
+
+
   rowRenderer({index, style}) {
-    style.height -= 6; 
+    style.height -= 6;
     return <SearchResult result={this.props.itineraries[index]} key={index} style={{...style}} />;
   }
 }
