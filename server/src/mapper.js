@@ -54,14 +54,9 @@ function mapAll(source) {
   const agents = mapAgents(source.Agents);
   const legs = mapLegs(source.Legs, places, carriers);
   const itineraries = mapItineraries(source.Itineraries, legs, agents);
-  return itineraries;
+  return {itineraries};
 }
 
 module.exports = {
-  mapPlaces,
-  mapAgents,
-  mapCarriers,
-  mapLegs,
-  mapItineraries,
   mapAll
 };

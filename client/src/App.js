@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import qs from 'qs';
 
 import './App.scss';
 import TopNav from './components/topnav';
 import SearchSummary from './components/search-summary';
 import SearchControls from './components/search-controls';
 import SearchResults from './components/search-results';
+import { search as searchFlights } from './api';
 
 const nextMonday = () => {
   const d = new Date();
@@ -44,13 +44,9 @@ class App extends Component {
     const search = searchParams();
     this.setState({search: search});
 
-    const q = qs.stringify(search);
-    fetch('http://localhost:4000/api/search?' + q)
-    .then((response) => {
-      return response.json();
-    })
-    .then((results) => {
-      this.setState({itineraries: results});
+    searchFlights(search)
+    .then(({itineraries}) => {
+      this.setState({itineraries});
     })
     .catch(console.error);
   }
