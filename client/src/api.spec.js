@@ -12,7 +12,7 @@ describe('api.search', () => {
 
   it('calls search endpoint with stringified query params', () => {
     search({foo: 'foo', bar: 'bar'});
-    expect(global.fetch).toHaveBeenCalledWith("http://localhost:4000/api/search?foo=foo&bar=bar");
+    expect(global.fetch).toHaveBeenCalledWith("http://localhost:4000/api/search?foo=foo&bar=bar", undefined);
   });
 
   it('returns response as json', () => {

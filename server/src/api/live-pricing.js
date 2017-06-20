@@ -27,21 +27,11 @@ const livePricing = {
           'Accept': 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        // uncomment if you'd like to use a development proxy (e.g. Charles or Fiddler)
-        // agent: new HttpProxyAgent({
-        //   host: 'localhost',
-        //   port: '8888'
-        // })
       })
     },
     pollSession: (creds) => {
       return fetch(pricingUrl + `/${creds.sessionKey}?apiKey=${config.apiKey}`, {
         method: 'GET',
-        // uncomment if you'd like to use a development proxy (e.g. Charles or Fiddler)
-        // agent: new HttpProxyAgent({
-        //   host: 'localhost',
-        //   port: '8888'
-        // })
       })
     }
   }
@@ -72,11 +62,16 @@ function createSession (params) {
   });
 }
 
-function startPolling (session) {
+function startPolling(session) {
   const location = session.location;
   const sessionKey = location.substring(location.lastIndexOf('/') + 1);
 
-  console.log('session created.');
+  return startPollingWithKey(sessionKey);
+}
+
+function startPollingWithKey(sessionKey, once) {
+
+  console.log('start polling');
 
   return new Promise((resolve, reject) => {
     // encapsulation of polling state to pass around
@@ -86,12 +81,12 @@ function startPolling (session) {
       onFinished: resolve,
       onError: reject,
       timedOut: false,
-      tries: 0
+      tries: 0,
+      once,
     };
 
     pollState.success = _.partial(pollSuccess, pollState);
     pollState.error = _.partial(pollError, pollState);
-
     pollState.repoll = () => {
       _.delay(() => {
         poll(pollState);
@@ -113,9 +108,13 @@ function poll (state) {
   }
 
   // auto-repoll if nothing happens for a while
-  const backupTimer = setTimeout(() => {
-    state.repoll();
-  }, pollDelay * 3);
+  let backupTimer;
+  if (!state.once) {
+    backupTimer = setTimeout(() => {
+      console.log("timeout");
+      state.repoll();
+    }, pollDelay * 3);
+  }
 
   console.log('polling...')
 
@@ -139,7 +138,8 @@ function pollSuccess (state, data) {
   if (state.finished) {
     return;
   }
-  if (data.Status === 'UpdatesComplete' || state.timedOut) {
+
+  if (data.Status === 'UpdatesComplete' || state.timedOut || state.once) {
     console.log('polling complete');
     state.finished = true;
     return state.onFinished(data);
@@ -180,5 +180,11 @@ livePricing.search = (searchParams) => {
       .catch(reject);
   });
 };
+
+livePricing.createSession = createSession;
+
+livePricing.pollSession = (sessionKey) => {
+  return startPollingWithKey(sessionKey, true);
+}
 
 module.exports = livePricing;

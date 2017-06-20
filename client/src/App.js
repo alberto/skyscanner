@@ -5,7 +5,7 @@ import TopNav from './components/topnav';
 import SearchSummary from './components/search-summary';
 import SearchControls from './components/search-controls';
 import SearchResults from './components/search-results';
-import { search as searchFlights } from './api';
+import { search as searchFlights, createSession, pollSession } from './api';
 
 const nextMonday = () => {
   const d = new Date();
@@ -31,6 +31,14 @@ const searchParams = () => {
   };
 }
 
+function throttle(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+}
+
 class App extends Component {
   constructor() {
     super();
@@ -38,17 +46,37 @@ class App extends Component {
       search: {},
       itineraries: [],
     }
+    this.pollSearch = this.pollSearch.bind(this);
+  }
+
+  pollSearch(sessionKey) {
+    pollSession({sessionKey})
+      .then(result => {
+        this.setState(result);
+        if (result.status === "UpdatesComplete") {
+          return result;
+        }
+        return throttle(1000).then(() => {
+          return this.pollSearch(sessionKey);
+        });
+      });
   }
 
   componentDidMount() {
     const search = searchParams();
     this.setState({search: search});
 
-    searchFlights(search)
-    .then(({itineraries}) => {
-      this.setState({itineraries});
+    // Client polling. Replace with the comment below to poll on the server
+    createSession(search)
+    .then(response => {
+      this.pollSearch(response.sessionKey);
     })
-    .catch(console.error);
+
+    // searchFlights(search)
+    // .then(({itineraries}) => {
+    //   this.setState({itineraries});
+    // })
+    // .catch(console.error);
   }
 
   render() {
